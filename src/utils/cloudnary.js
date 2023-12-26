@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
+import fs, { fsync } from "fs";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDNARY_CLOUD_NAME,
@@ -14,7 +14,9 @@ const uploadOnCloudnary = async (localFilePath) => {
       resource_type: "auto",
     });
 
-    console.log("File is uploaded in cloudnary", response.url);
+    // console.log("File is uploaded in cloudnary", response.url);
+
+    fs.unlinkSync(localFilePath);
     return response;
   } catch (error) {
     fs.unlinkSync(localFilePath); // remove the locally saved temprory file as the operation got failed
